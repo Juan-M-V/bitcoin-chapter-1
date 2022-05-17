@@ -1,3 +1,6 @@
+use bitcoin_chapter1::FieldElement;
+
 fn main() {
-    println!("Hello, world!");
+    let fieldElem = FieldElement {prime: 2, num: 1};
+    println!("{:?}", fieldElem);
 }
