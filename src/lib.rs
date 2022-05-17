@@ -1,4 +1,7 @@
 use std::ops::{Add, Div, Mul, Sub};
+mod field_element_const_generics;
+
+pub use field_element_const_generics::FieldElement2;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd)]
 pub struct FieldElement {
