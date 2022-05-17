@@ -1,5 +1,5 @@
 [package]
-name = "test_pkg"
+name = "bitcoin_chapter1"
 version = "0.1.0"
 edition = "2021"
 

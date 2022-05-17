@@ -1,14 +1,25 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, PartialEq, Eq, PartialOrd)]
 pub struct FieldElement {
     pub prime: i64,
-    pub num: i64
+    pub num: i64,
 }
 
 impl FieldElement {
     pub fn new(value: i64, prime: i64) -> FieldElement {
-        FieldElement { prime, num: value.rem_euclid(prime) }
+        FieldElement {
+            prime,
+            num: value.rem_euclid(prime),
+        }
+    }
+
+    pub fn pow(self, exponent: u32) -> FieldElement {
+        let num = self.num.pow(exponent).rem_euclid(self.prime);
+        FieldElement {
+            prime: self.prime,
+            num,
+        }
     }
 }
 
@@ -24,7 +35,10 @@ impl Add for FieldElement {
         }
 
         let num = (self.num + y.num).rem_euclid(self.prime);
-        FieldElement {prime: self.prime, num}
+        FieldElement {
+            prime: self.prime,
+            num,
+        }
     }
 }
 
@@ -37,7 +51,10 @@ impl Sub for FieldElement {
         }
 
         let num = (self.num - y.num).rem_euclid(self.prime);
-        FieldElement {prime: self.prime, num }
+        FieldElement {
+            prime: self.prime,
+            num,
+        }
     }
 }
 
@@ -50,7 +67,26 @@ impl Mul for FieldElement {
         }
 
         let num = (self.num * y.num).rem_euclid(self.prime);
-        FieldElement {prime: self.prime, num }
+        FieldElement {
+            prime: self.prime,
+            num,
+        }
+    }
+}
+
+impl Div for FieldElement {
+    type Output = FieldElement;
+
+    fn div(self, y: FieldElement) -> Self::Output {
+        if self.prime != y.prime {
+            panic!("Both elements must belong to fields of the same size.")
+        }
+        // x / y == x * y^-1 == x * y^(p - 2)
+        let num = self.num * (y.pow((self.prime - 2) as u32)).num;
+        FieldElement {
+            prime: self.prime,
+            num: num.rem_euclid(self.prime),
+        }
     }
 }
 
@@ -67,7 +103,7 @@ fn add_from_different_fields() {
     let x = FieldElement::new(2, 4);
     let y = FieldElement::new(1, 3);
 
-    x + y;
+    let _ = x + y;
 }
 
 #[test]
@@ -88,25 +124,46 @@ fn negative_field_elements_can_be_added() {
 
 #[test]
 fn field_elements_can_be_substracted() {
-    let x = FieldElement::new(2,5);
-    let y = FieldElement::new(3,5);
+    let x = FieldElement::new(2, 5);
+    let y = FieldElement::new(3, 5);
 
-    assert_eq!(FieldElement::new(4,5), x - y)
+    assert_eq!(FieldElement::new(4, 5), x - y)
 }
 
 #[test]
 fn field_elements_can_be_multiplied() {
-    let x = FieldElement::new(74,5);
-    let y = FieldElement::new(2,5);
+    let x = FieldElement::new(74, 5);
+    let y = FieldElement::new(2, 5);
 
-    assert_eq!(FieldElement::new(3,5), x * y)
+    assert_eq!(FieldElement::new(3, 5), x * y)
 }
 
 #[test]
 fn negative_field_elements_can_be_multiplied() {
-    let x = FieldElement::new(74,5);
-    let y = FieldElement::new(-2,5);
+    let x = FieldElement::new(74, 5);
+    let y = FieldElement::new(-2, 5);
 
-    assert_eq!(FieldElement::new(2,5), x * y)
+    assert_eq!(FieldElement::new(2, 5), x * y)
 }
 
+#[test]
+fn field_elements_have_powers() {
+    let x = FieldElement::new(3, 13);
+
+    assert_eq!(FieldElement::new(1, 13), x.pow(3))
+}
+
+#[test]
+fn pow_0_works() {
+    let x = FieldElement::new(3, 13);
+
+    assert_eq!(FieldElement::new(1, 13), x.pow(0))
+}
+
+#[test]
+fn field_elements_can_be_divided() {
+    let x = FieldElement::new(2, 19);
+    let y = FieldElement::new(7, 19);
+
+    assert_eq!(FieldElement::new(3, 19), x / y)
+}
