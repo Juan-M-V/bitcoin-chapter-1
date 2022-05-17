@@ -90,80 +90,85 @@ impl Div for FieldElement {
     }
 }
 
-#[test]
-fn field_elements_can_be_created() {
-    let field_element = FieldElement::new(18, 17);
+#[cfg(test)]
+mod tests {
+    use crate::*;
 
-    assert_eq!(FieldElement::new(1, 17), field_element);
-}
+    #[test]
+    fn field_elements_can_be_created() {
+        let field_element = FieldElement::new(18, 17);
 
-#[test]
-#[should_panic]
-fn add_from_different_fields() {
-    let x = FieldElement::new(2, 4);
-    let y = FieldElement::new(1, 3);
+        assert_eq!(FieldElement::new(1, 17), field_element);
+    }
 
-    let _ = x + y;
-}
+    #[test]
+    #[should_panic]
+    fn add_from_different_fields() {
+        let x = FieldElement::new(2, 4);
+        let y = FieldElement::new(1, 3);
 
-#[test]
-fn field_elements_can_be_added() {
-    let x = FieldElement::new(2, 3);
-    let y = FieldElement::new(1, 3);
+        let _ = x + y;
+    }
 
-    assert_eq!(FieldElement::new(0, 3), x + y)
-}
+    #[test]
+    fn field_elements_can_be_added() {
+        let x = FieldElement::new(2, 3);
+        let y = FieldElement::new(1, 3);
 
-#[test]
-fn negative_field_elements_can_be_added() {
-    let x = FieldElement::new(-2, 3);
-    let y = FieldElement::new(1, 3);
+        assert_eq!(FieldElement::new(0, 3), x + y)
+    }
 
-    assert_eq!(FieldElement::new(2, 3), x + y)
-}
+    #[test]
+    fn negative_field_elements_can_be_added() {
+        let x = FieldElement::new(-2, 3);
+        let y = FieldElement::new(1, 3);
 
-#[test]
-fn field_elements_can_be_substracted() {
-    let x = FieldElement::new(2, 5);
-    let y = FieldElement::new(3, 5);
+        assert_eq!(FieldElement::new(2, 3), x + y)
+    }
 
-    assert_eq!(FieldElement::new(4, 5), x - y)
-}
+    #[test]
+    fn field_elements_can_be_substracted() {
+        let x = FieldElement::new(2, 5);
+        let y = FieldElement::new(3, 5);
 
-#[test]
-fn field_elements_can_be_multiplied() {
-    let x = FieldElement::new(74, 5);
-    let y = FieldElement::new(2, 5);
+        assert_eq!(FieldElement::new(4, 5), x - y)
+    }
 
-    assert_eq!(FieldElement::new(3, 5), x * y)
-}
+    #[test]
+    fn field_elements_can_be_multiplied() {
+        let x = FieldElement::new(74, 5);
+        let y = FieldElement::new(2, 5);
 
-#[test]
-fn negative_field_elements_can_be_multiplied() {
-    let x = FieldElement::new(74, 5);
-    let y = FieldElement::new(-2, 5);
+        assert_eq!(FieldElement::new(3, 5), x * y)
+    }
 
-    assert_eq!(FieldElement::new(2, 5), x * y)
-}
+    #[test]
+    fn negative_field_elements_can_be_multiplied() {
+        let x = FieldElement::new(74, 5);
+        let y = FieldElement::new(-2, 5);
 
-#[test]
-fn field_elements_have_powers() {
-    let x = FieldElement::new(3, 13);
+        assert_eq!(FieldElement::new(2, 5), x * y)
+    }
 
-    assert_eq!(FieldElement::new(1, 13), x.pow(3))
-}
+    #[test]
+    fn field_elements_have_powers() {
+        let x = FieldElement::new(3, 13);
 
-#[test]
-fn pow_0_works() {
-    let x = FieldElement::new(3, 13);
+        assert_eq!(FieldElement::new(1, 13), x.pow(3))
+    }
 
-    assert_eq!(FieldElement::new(1, 13), x.pow(0))
-}
+    #[test]
+    fn pow_0_works() {
+        let x = FieldElement::new(3, 13);
 
-#[test]
-fn field_elements_can_be_divided() {
-    let x = FieldElement::new(2, 19);
-    let y = FieldElement::new(7, 19);
+        assert_eq!(FieldElement::new(1, 13), x.pow(0))
+    }
 
-    assert_eq!(FieldElement::new(3, 19), x / y)
+    #[test]
+    fn field_elements_can_be_divided() {
+        let x = FieldElement::new(2, 19);
+        let y = FieldElement::new(7, 19);
+
+        assert_eq!(FieldElement::new(3, 19), x / y)
+    }
 }
